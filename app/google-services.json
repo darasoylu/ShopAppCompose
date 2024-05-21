@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "722415383541",
+    "firebase_url": "https://shopapp-d549b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "shopapp-d549b",
+    "storage_bucket": "shopapp-d549b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722415383541:android:cbdd9105d9a3269842e6bc",
+        "android_client_info": {
+          "package_name": "com.darasoylu.shopapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATHriXX3eqMi7-TFxoQdjrliWMgI58XNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722415383541:android:2e08f77080ac932942e6bc",
+        "android_client_info": {
+          "package_name": "com.darasoylu.shopappcompose"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATHriXX3eqMi7-TFxoQdjrliWMgI58XNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
