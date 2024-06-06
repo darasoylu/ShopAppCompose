@@ -28,6 +28,7 @@ class ShopAppRepositoryImpl @Inject constructor(
                         document.id,
                         document.get("name") as String,
                         document.get("image") as String,
+                        document.get("price") as Long,
                         document.get("categoryId") as String
                     )
                     productList.add(product)
