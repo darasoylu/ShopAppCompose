@@ -20,18 +20,20 @@ class ShopAppRepositoryImpl @Inject constructor(
             val documents = firebaseFirestore.collection(collectionPath).get().await().documents
             val productList = mutableListOf<ProductModel>()
 
-            Log.i("abjhsdasd", productList.toString())
+            Log.i("abjhsdasd", documents.toString())
 
             for (document in documents) {
                 document?.let {
                     val product = ProductModel(
                         document.id,
-                        document.get("name") as String,
-                        document.get("image") as String,
-                        document.get("price") as Long,
-                        document.get("categoryId") as String
+                        document.getString("name"),
+                        document.getString("image"),
+                        document.getDouble("price"),
+                        document.getString("categoryId")
                     )
                     productList.add(product)
+                    Log.i("abjhsdasd", productList.toString())
+
                 }
             }
             Log.i("abjhsdasd2", productList.toString())
@@ -56,9 +58,9 @@ class ShopAppRepositoryImpl @Inject constructor(
                 document?.let {
                     val category = CategoryModel(
                         document.id,
-                        document.get("name") as String,
-                        document.get("count") as Long,
-                        document.get("sort") as Long,
+                        document.getString("name"),
+                        document.getDouble("count"),
+                        document.getDouble("sort")
                         )
                     categoryList.add(category)
                 }

@@ -18,9 +18,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,6 +31,7 @@ import com.darasoylu.shopappcompose.data.model.CategoryModel
 import com.darasoylu.shopappcompose.data.model.ProductModel
 import com.darasoylu.shopappcompose.screens.components.Loader
 import com.darasoylu.shopappcompose.ui.theme.GreyCardText
+import com.darasoylu.shopappcompose.util.formatPrice
 import com.darasoylu.shopappcompose.viewmodel.HomeViewModel
 
 @Composable
@@ -52,6 +52,7 @@ fun HomeScreen(
     ) {
         Column {
             //Banner Screen
+            /**
             Image(
                 imageVector = Icons.Outlined.FavoriteBorder,
                 modifier = Modifier
@@ -60,7 +61,7 @@ fun HomeScreen(
                 contentScale = ContentScale.FillBounds,
                 contentDescription = ""
             )
-            /**
+
             Image(
                 modifier = Modifier
                     .height(140.dp)
@@ -209,7 +210,7 @@ fun ProductCard(
                 AsyncImage(
                     model = product.image,
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillBounds,
                     modifier = Modifier.fillMaxSize()
                 )
                 Icon(
@@ -232,7 +233,7 @@ fun ProductCard(
             overflow = TextOverflow.Ellipsis,
         )
         Text(
-            text = "$ " + product.price.toString(),
+            text = stringResource(R.string.product_price, formatPrice(product.price!!)),
             color = Color.Gray,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
