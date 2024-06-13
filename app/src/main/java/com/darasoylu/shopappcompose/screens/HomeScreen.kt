@@ -1,5 +1,8 @@
 package com.darasoylu.shopappcompose.screens
 
+import android.annotation.SuppressLint
+import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -25,218 +28,149 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.darasoylu.shopappcompose.R
 import com.darasoylu.shopappcompose.data.model.CategoryModel
 import com.darasoylu.shopappcompose.data.model.ProductModel
+import com.darasoylu.shopappcompose.navigation.Routes
 import com.darasoylu.shopappcompose.screens.components.Loader
 import com.darasoylu.shopappcompose.ui.theme.GreyCardText
+import com.darasoylu.shopappcompose.util.LoadingAnimation
 import com.darasoylu.shopappcompose.util.formatPrice
 import com.darasoylu.shopappcompose.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    Log.i("askjdasd11", "here")
-
-    //val news = homeViewModel.news.collectAsState()
-
-    val productState = homeViewModel.productsState
-    val categoryState = homeViewModel.categoriesState
     var selectedCategoryPosition by remember { mutableIntStateOf(0) }
     var selectedCategory by remember { mutableStateOf(CategoryModel(name = "All")) }
+    val productState = homeViewModel.productsState
+    val categoryState = homeViewModel.categoriesState
 
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column {
-            //Banner Screen
-            /**
-            Image(
-                imageVector = Icons.Outlined.FavoriteBorder,
-                modifier = Modifier
-                    .height(140.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.FillBounds,
-                contentDescription = ""
-            )
-
-            Image(
-                modifier = Modifier
-                    .height(140.dp)
-                    .fillMaxWidth(),
-                painter = "",
-                contentScale = ContentScale.FillBounds,
-                contentDescription = ""
-            )
-            **/
-
-            Log.i("askjdasd1", "here")
-
-            if (productState.loading) {
-                Log.i("askjdasd3", "here")
-                Loader()
-            }
-
-            if (categoryState.loading) {
-                Log.i("askjdasd4", "here")
-                Loader()
-            }
-
-            if (categoryState.categories.isNotEmpty()) {
-                Log.i("askjdasd5", categoryState.categories.toString())
-                //Text(text = "Categories")
-                CategorySection(
-                    categories = categoryState.categories,
-                    selectedPosition = selectedCategoryPosition,
-                    onCategorySelected = { categoryId, selectedPosition  ->
-                        selectedCategory = categoryId!!
-                        selectedCategoryPosition = selectedPosition
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-
-            if (productState.products.isNotEmpty()) {
-                val categoryFilteredProductList = productState.products.filter { it.categoryId == selectedCategory.categoryId }
-                val products = if (selectedCategory.name == "All") productState.products else categoryFilteredProductList
-
-                ProductSection(products = products,
-                    selectedPosition = selectedCategoryPosition,
-                    onCategorySelected = {
-                        selectedCategoryPosition = it
-                    }
-                )
-            }
-
-        }
-
-    }
-}
-
-@Composable
-fun CategorySection(categories: List<CategoryModel>, selectedPosition: Int, onCategorySelected: (CategoryModel?, Int) -> Unit) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(16.dp)
-    ) {
-        itemsIndexed(categories) { index, item ->
-            CategoryCard(
-                category = item,
-                isSelected = selectedPosition == index,
-                onClick = {
-                    Log.i("lnjadas", item.categoryId.toString())
-                    onCategorySelected(item, index)
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun CategoryCard(
-    category: CategoryModel,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Card(
+    Scaffold(
         modifier = Modifier
-            .height(50.dp)
-            .fillMaxWidth()
-            .aspectRatio(2f),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color.Black else Color.White,
-        )
-    ) {
-        Box(
+            .fillMaxSize(),
+    ) { it ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClick() },
-            contentAlignment = Alignment.Center
+                .padding(it)
         ) {
-            Text(
-                fontSize = 16.sp,
-                color = if (isSelected) Color.White else GreyCardText,
-                text = category.name ?: "",
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
-
-@Composable
-fun ProductSection(products: List<ProductModel>, selectedPosition: Int, onCategorySelected: (Int) -> Unit) {
-    LazyVerticalGrid(
-        modifier = Modifier.background(Color.White),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(40.dp),
-        columns = GridCells.Fixed(2)
-    ) {
-        itemsIndexed(products) { index, item ->
-            ProductCard(
-                product = item,
-                isSelected = selectedPosition == index,
-                onClick = {
-                    Log.i("lnasdasd", "here")
+            if (productState.loading || categoryState.loading) {
+                Loader()
+            } else {
+                if (categoryState.categories.isNotEmpty()) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        itemsIndexed(categoryState.categories) { index, item ->
+                            Card(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .fillMaxWidth()
+                                    .aspectRatio(2f)
+                                    .clickable {
+                                        selectedCategory = item
+                                        selectedCategoryPosition = index
+                                    },
+                                border = BorderStroke(1.dp, Color.Black),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = if (selectedCategoryPosition == index) Color.Black else Color.White,
+                                )
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        fontSize = 16.sp,
+                                        color = if (selectedCategoryPosition == index) Color.White else GreyCardText,
+                                        text = item.name ?: "",
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-            )
-        }
-    }
-}
 
-@Composable
-fun ProductCard(
-    product: ProductModel,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Column (
-        verticalArrangement = Arrangement.spacedBy(1.dp),
-    ) {
-        Card(
-            modifier = Modifier
-                .aspectRatio(1f)
-        ) {
-            Box (
-                modifier = Modifier
-                    .clickable { onClick() }
-            ) {
-                AsyncImage(
-                    model = product.image,
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorite",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(8.dp)
-                        .size(32.dp)
-                )
+                Spacer(modifier = Modifier.height(5.dp))
+
+                if (productState.products.isNotEmpty()) {
+                    val categoryFilteredProductList =
+                        productState.products.filter { it.categoryId == selectedCategory.categoryId }
+                    val products =
+                        if (selectedCategory.name == "All") productState.products else categoryFilteredProductList
+
+                    LazyVerticalGrid(
+                        modifier = Modifier.background(Color.White),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(40.dp),
+                        columns = GridCells.Fixed(2)
+                    ) {
+                        itemsIndexed(products) { index, item ->
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(1.dp),
+                            ) {
+                                Card(
+                                    modifier = Modifier
+                                        .aspectRatio(1f)
+                                        .clickable {
+                                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                                key = "product",
+                                                value = item
+                                            )
+                                            navController.navigate(Routes.PRODUCT_DETAIL_SCREEN)
+                                        }
+                                ) {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        SubcomposeAsyncImage(
+                                            model = item.image,
+                                            contentDescription = null,
+                                            loading = { LoadingAnimation() },
+                                            contentScale = ContentScale.FillBounds,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Outlined.FavoriteBorder,
+                                            contentDescription = "Favorite",
+                                            tint = Color.Black,
+                                            modifier = Modifier
+                                                .align(Alignment.BottomEnd)
+                                                .padding(8.dp)
+                                                .size(32.dp)
+                                        )
+                                    }
+                                }
+                                Text(
+                                    text = item.name!!,
+                                    color = Color.Black,
+                                    maxLines = 1,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 18.sp,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    text = stringResource(R.string.product_price, formatPrice(item.price!!)),
+                                    color = Color.Gray,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
-        Text(
-            text = product.name!!,
-            color = Color.Black,
-            maxLines = 1,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-            text = stringResource(R.string.product_price, formatPrice(product.price!!)),
-            color = Color.Gray,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
     }
 }

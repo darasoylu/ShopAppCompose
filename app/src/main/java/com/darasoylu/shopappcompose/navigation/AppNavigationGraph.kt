@@ -7,8 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.darasoylu.shopappcompose.data.model.ProductModel
 import com.darasoylu.shopappcompose.screens.HomeScreen
+import com.darasoylu.shopappcompose.screens.ProductDetailScreen
 
 @Composable
 fun AppNavigationGraph() {
@@ -64,13 +66,22 @@ fun AppNavigationGraph() {
 
             composable(Routes.HOME_SCREEN) {
                 Log.i("lknasdasd2", "home")
-                HomeScreen()
+                HomeScreen(navController)
             }
             composable(Routes.PROFILE_SCREEN) {
                 //ProfileScreen()
             }
             composable(Routes.SETTINGS_SCREEN) {
                 //SettingsScreen()
+            }
+            composable(Routes.PRODUCT_DETAIL_SCREEN) {
+
+                val product = navController.previousBackStackEntry?.savedStateHandle?.get<ProductModel>("product")!!
+                product.let {
+                    Log.i("absdasd", it.toString())
+                    ProductDetailScreen(navController, it)
+                }
+
             }
         }
     }
