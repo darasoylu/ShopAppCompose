@@ -15,10 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.darasoylu.shopappcompose.data.model.ProductModel
 import com.darasoylu.shopappcompose.screens.HomeScreen
 import com.darasoylu.shopappcompose.screens.ProductDetailScreen
@@ -31,7 +33,7 @@ fun AppNavigationGraph() {
         bottomBar = {
             NavigationBar(
                 modifier = Modifier.height(100.dp),
-                containerColor = Color.White
+                containerColor = Color(0xFFF3F3EF)
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
@@ -63,9 +65,7 @@ fun AppNavigationGraph() {
             startDestination = Routes.HOME_SCREEN,
             modifier = Modifier.padding(paddingValues)
         ) {
-
             composable(Routes.HOME_SCREEN) {
-                Log.i("lknasdasd2", "home")
                 HomeScreen(navController)
             }
             composable(Routes.PROFILE_SCREEN) {
@@ -74,14 +74,12 @@ fun AppNavigationGraph() {
             composable(Routes.SETTINGS_SCREEN) {
                 //SettingsScreen()
             }
-            composable(Routes.PRODUCT_DETAIL_SCREEN) {
-
-                val product = navController.previousBackStackEntry?.savedStateHandle?.get<ProductModel>("product")!!
-                product.let {
-                    Log.i("absdasd", it.toString())
+            composable(Routes.PRODUCT_DETAIL_SCREEN) { backStackEntry ->
+                val product = navController.previousBackStackEntry?.savedStateHandle?.get<ProductModel>("product")
+                    ?: backStackEntry.savedStateHandle.get<ProductModel>("product")
+                product?.let {
                     ProductDetailScreen(navController, it)
                 }
-
             }
         }
     }

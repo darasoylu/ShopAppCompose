@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.ImageLoader
@@ -59,114 +60,116 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .background(Color.White)
         ) {
             if (productState.loading || categoryState.loading) {
                 Loader()
-            } else {
-                if (categoryState.categories.isNotEmpty()) {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(16.dp)
-                    ) {
-                        itemsIndexed(categoryState.categories) { index, item ->
-                            Card(
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .fillMaxWidth()
-                                    .aspectRatio(2f)
-                                    .clickable {
-                                        selectedCategory = item
-                                        selectedCategoryPosition = index
-                                    },
-                                border = BorderStroke(1.dp, Color.Black),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = if (selectedCategoryPosition == index) Color.Black else Color.White,
-                                )
+            }
+            if (categoryState.categories.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    itemsIndexed(categoryState.categories) { index, item ->
+                        Card(
+                            modifier = Modifier
+                                .height(50.dp)
+                                .fillMaxWidth()
+                                .aspectRatio(2f)
+                                .clickable {
+                                    selectedCategory = item
+                                    selectedCategoryPosition = index
+                                },
+                            border = BorderStroke(1.dp, Color.Black),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (selectedCategoryPosition == index) Color.Black else Color.White,
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                             ) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        fontSize = 16.sp,
-                                        color = if (selectedCategoryPosition == index) Color.White else GreyCardText,
-                                        text = item.name ?: "",
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
+                                Text(
+                                    fontSize = 16.sp,
+                                    color = if (selectedCategoryPosition == index) Color.White else GreyCardText,
+                                    text = item.name ?: "",
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             }
                         }
                     }
                 }
+            }
 
-                Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
-                if (productState.products.isNotEmpty()) {
-                    val categoryFilteredProductList =
-                        productState.products.filter { it.categoryId == selectedCategory.categoryId }
-                    val products =
-                        if (selectedCategory.name == "All") productState.products else categoryFilteredProductList
+            if (productState.products.isNotEmpty()) {
+                val categoryFilteredProductList =
+                    productState.products.filter { it.categoryId == selectedCategory.categoryId }
+                val products =
+                    if (selectedCategory.name == "All") productState.products else categoryFilteredProductList
 
-                    LazyVerticalGrid(
-                        modifier = Modifier.background(Color.White),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(40.dp),
-                        columns = GridCells.Fixed(2)
-                    ) {
-                        itemsIndexed(products) { index, item ->
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(1.dp),
-                            ) {
-                                Card(
-                                    modifier = Modifier
-                                        .aspectRatio(1f)
-                                        .clickable {
-                                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                                key = "product",
-                                                value = item
-                                            )
-                                            navController.navigate(Routes.PRODUCT_DETAIL_SCREEN)
-                                        }
-                                ) {
-                                    Box(
-                                        modifier = Modifier.fillMaxSize()
-                                    ) {
-                                        SubcomposeAsyncImage(
-                                            model = item.image,
-                                            contentDescription = null,
-                                            loading = { LoadingAnimation() },
-                                            contentScale = ContentScale.FillBounds,
-                                            modifier = Modifier.fillMaxSize()
+                LazyVerticalGrid(
+                    modifier = Modifier.background(Color.White),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(40.dp),
+                    columns = GridCells.Fixed(2)
+                ) {
+                    itemsIndexed(products) { index, item ->
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(1.dp),
+                        ) {
+                            Card(
+                                modifier = Modifier
+                                    .aspectRatio(1f)
+                                    .clickable {
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            key = "product",
+                                            value = item
                                         )
-                                        Icon(
-                                            imageVector = Icons.Outlined.FavoriteBorder,
-                                            contentDescription = "Favorite",
-                                            tint = Color.Black,
-                                            modifier = Modifier
-                                                .align(Alignment.BottomEnd)
-                                                .padding(8.dp)
-                                                .size(32.dp)
-                                        )
+                                        navController.navigate(Routes.PRODUCT_DETAIL_SCREEN)
                                     }
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    SubcomposeAsyncImage(
+                                        model = item.image,
+                                        contentDescription = null,
+                                        loading = { LoadingAnimation() },
+                                        contentScale = ContentScale.FillBounds,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Outlined.FavoriteBorder,
+                                        contentDescription = "Favorite",
+                                        tint = Color.Black,
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(8.dp)
+                                            .size(32.dp)
+                                    )
                                 }
-                                Text(
-                                    text = item.name!!,
-                                    color = Color.Black,
-                                    maxLines = 1,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 18.sp,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                                Text(
-                                    text = stringResource(R.string.product_price, formatPrice(item.price!!)),
-                                    color = Color.Gray,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp,
-                                )
                             }
+                            Text(
+                                text = item.name!!,
+                                color = Color.Black,
+                                maxLines = 1,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 18.sp,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Text(
+                                text = stringResource(
+                                    R.string.product_price,
+                                    formatPrice(item.price!!)
+                                ),
+                                color = Color.Gray,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                            )
                         }
                     }
                 }
