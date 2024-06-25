@@ -81,6 +81,8 @@ dependencies {
     //implementation(libs.logging.interceptor)
     //implementation (libs.converter.moshi)
     //implementation(libs.moshi.kotlin)
+    //implementation(libs.androidx.room.ktx)
+    //kapt(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.coroutines.android)
 

@@ -182,8 +182,6 @@ fun ProductDetailScreen(
                         modifier = Modifier
                             .padding(bottom = 20.dp)
                     ) {
-                        val context = LocalContext.current
-
                         Button(
                             onClick = {
                                 scope.launch {

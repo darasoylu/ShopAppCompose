@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.darasoylu.shopappcompose.data.model.ProductModel
+import com.darasoylu.shopappcompose.screens.CartScreen
 import com.darasoylu.shopappcompose.screens.HomeScreen
 import com.darasoylu.shopappcompose.screens.ProductDetailScreen
 import com.darasoylu.shopappcompose.ui.theme.barColor
@@ -102,7 +103,7 @@ fun AppNavigationGraph() {
                 HomeScreen(navController)
             }
             composable(Routes.CART_SCREEN) {
-                //CartScreen()
+                CartScreen(navController  )
             }
             composable(Routes.SETTINGS_SCREEN) {
                 //SettingsScreen()
