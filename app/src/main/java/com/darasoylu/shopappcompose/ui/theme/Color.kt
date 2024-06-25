@@ -12,3 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val GreyCardRadius = Color(0xFFF4F4F4)
 val GreyCardText = Color(0xFF757474)
+
+val barColor = Color(0xFFF3F3EF)
+
+val starColor = Color(0xFFCCCC00)

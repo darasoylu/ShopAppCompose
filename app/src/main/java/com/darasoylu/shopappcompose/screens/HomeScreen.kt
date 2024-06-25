@@ -1,11 +1,6 @@
 package com.darasoylu.shopappcompose.screens
 
-import android.annotation.SuppressLint
-import android.net.Uri
-import android.os.Bundle
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,15 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.ImageLoader
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.darasoylu.shopappcompose.R
 import com.darasoylu.shopappcompose.data.model.CategoryModel
-import com.darasoylu.shopappcompose.data.model.ProductModel
 import com.darasoylu.shopappcompose.navigation.Routes
 import com.darasoylu.shopappcompose.screens.components.Loader
 import com.darasoylu.shopappcompose.ui.theme.GreyCardText
@@ -141,15 +132,6 @@ fun HomeScreen(
                                         loading = { LoadingAnimation() },
                                         contentScale = ContentScale.FillBounds,
                                         modifier = Modifier.fillMaxSize()
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Outlined.FavoriteBorder,
-                                        contentDescription = "Favorite",
-                                        tint = Color.Black,
-                                        modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .padding(8.dp)
-                                            .size(32.dp)
                                     )
                                 }
                             }

@@ -4,32 +4,29 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavItem(
     val route: String,
     val title: String,
     val icon: ImageVector,
-    val selectedIcon: ImageVector
 )
 
 val listOfNavItems = listOf(
     NavItem(
         route = "HOME",
-        title = "HOME",
-        icon = Icons.Filled.Home,
-        selectedIcon = Icons.Default.Home
+        title = "Home",
+        icon = Icons.Filled.Home
     ),
     NavItem(
-        route = "PROFILE",
-        title = "PROFILE",
-        icon = Icons.Filled.Person,
-        selectedIcon = Icons.Default.Person
+        route = "CART",
+        title = "Cart",
+        icon = Icons.Filled.ShoppingCart,
     ),
     NavItem(
         route = "SETTINGS",
-        title = "SETTINGS",
+        title = "Settings",
         icon = Icons.Filled.Settings,
-        selectedIcon = Icons.Default.Settings
     )
 )

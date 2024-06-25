@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">ShopAppCompose</string>
     <string name="product_price">$ %s</string>
+    <string name="product_detail_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+    </string>
+    <string name="product_detail_star">4.8</string>
+    <string name="product_detail_review">(156 Reviews)</string>
 </resources>
