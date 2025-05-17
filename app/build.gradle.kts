@@ -2,9 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -44,7 +45,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "2.0.0"
     }
     packaging {
         resources {
@@ -72,22 +73,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation ("com.google.firebase:firebase-config:22.1.0") // Remote Config library
+
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    kapt (libs.hilt.android.compiler)
-
-    //implementation (libs.retrofit)
-    //implementation(libs.logging.interceptor)
-    //implementation (libs.converter.moshi)
-    //implementation(libs.moshi.kotlin)
-    //implementation(libs.androidx.room.ktx)
-    //kapt(libs.androidx.room.compiler)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.coil.compose)
-
-    implementation(libs.accompanist.systemuicontroller)
 
 }

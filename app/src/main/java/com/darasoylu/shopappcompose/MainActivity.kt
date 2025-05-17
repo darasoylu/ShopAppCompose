@@ -11,8 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.darasoylu.shopappcompose.navigation.AppNavigationGraph
-import com.darasoylu.shopappcompose.ui.theme.ShopAppComposeTheme
-import com.darasoylu.shopappcompose.ui.theme.barColor
+import com.darasoylu.shopappcompose.presentation.theme.ShopAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +26,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(Color.White)
                 ) {
-                    ChangeNavigationBarColor()
-                    AppEntryPoint()
+                   AppEntryPoint()
                 }
             }
         }
@@ -38,14 +36,4 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun AppEntryPoint() {
     AppNavigationGraph()
-}
-
-@Composable
-fun ChangeNavigationBarColor() {
-    val systemUiController = com.google.accompanist.systemuicontroller.rememberSystemUiController()
-
-    systemUiController.setNavigationBarColor(
-        color = barColor,
-        darkIcons = false
-    )
 }
